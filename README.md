@@ -1,5 +1,13 @@
 # Single Node (Pseudo Distributed) Cluster
 
+## Quick Start
+Run Docker Compose
+```
+docker compose up -d
+```
+
+Or manually build image and run as following:
+
 ## Build Image
 ```
 docker build -t hadoop-pseudo:latest .
