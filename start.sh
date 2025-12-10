@@ -13,8 +13,14 @@ fi
 
 echo "Starting Hadoop services..."
 
+# Start HDFS: Namenode, Secondary Namenode and Datanode
 start-dfs.sh
+
+# Start YARN: ResourceManager and NodeManager
 start-yarn.sh
+
+# Start MapReduce JobHistory Server
+mapred --daemon start historyserver
 
 # Keep container running by tailing logs (or just wait)
 echo "Hadoop is running. Logs:"

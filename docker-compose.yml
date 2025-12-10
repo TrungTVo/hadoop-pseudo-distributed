@@ -3,11 +3,8 @@ services:
     image: hadoop-pseudo:latest
     build: .
     container_name: hadoop-single-cluster
-    hostname: localhost
-    
-    # Network configuration
-    networks:
-      - hadoop-network
+    hostname: hadoop-single-cluster
+    network_mode: bridge
     
     # Port mappings
     ports:
@@ -27,6 +24,8 @@ services:
       - "8020:8020"
       # YARN ResourceManager IPC
       - "8032:8032"
+      # MapReduce JobHistory Server web UI
+      - "19888:19888"
     
     # Volumes for persistent storage
     volumes:
@@ -34,8 +33,6 @@ services:
       - hadoop-namenode-data:/opt/hadoop-${HADOOP_VERSION}/hadoop-trungtvo-data/name
       # HDFS datanode data
       - hadoop-datanode-data:/opt/hadoop-${HADOOP_VERSION}/hadoop-trungtvo-data/data
-      # Hadoop logs
-      - hadoop-logs:/opt/hadoop-${HADOOP_VERSION}/logs
       # Hadoop configurations
       - ./etc/hadoop/core-site.xml:/opt/hadoop-3.4.2/etc/hadoop/core-site.xml
       - ./etc/hadoop/hdfs-site.xml:/opt/hadoop-3.4.2/etc/hadoop/hdfs-site.xml
@@ -47,8 +44,6 @@ services:
     environment:
       HADOOP_HOME: /opt/hadoop-${HADOOP_VERSION}
       JAVA_HOME: /usr/lib/jvm/java-21-openjdk-arm64
-      # Suppress warnings
-      HADOOP_SHELL_SCRIPT_DEBUG: 0
     
     # Keep container running
     stdin_open: true
@@ -57,14 +52,8 @@ services:
     # Restart policy
     restart: unless-stopped
 
-networks:
-  hadoop-network:
-    driver: bridge
-
 volumes:
   hadoop-namenode-data:
     driver: local
   hadoop-datanode-data:
-    driver: local
-  hadoop-logs:
     driver: local

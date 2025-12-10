@@ -15,7 +15,7 @@ docker build -t hadoop-pseudo:latest .
 
 ## Start a Single Node Cluster
 ```
-docker run -it --name hadoop-single-cluster -h localhost \
+docker run -it --name hadoop-single-cluster -h hadoop-single-cluster \
     -p 9870:9870 \
     -p 9868:9868 \
     -p 9864:9864 \
@@ -41,6 +41,29 @@ Check running processes:
 ```
 jps -l
 ```
+
+## Hostname Config
+
+Note that we defined hostname as `hadoop-single-cluster`, docker will add this to `/etc/hosts` and `/etc/hostname` file inside the cluster container. This hostname is used for all internal Hadoop daemons communication. If we want to access this in our host system, we also need to add it in our `/etc/hosts` file of our host system. Usually this file is not editable by default, do these following step to add the hostname:
+
+Allow edit (MacOS):
+```
+sudo chflags nouchg /etc/hosts
+```
+
+Then add `hadoop-single-cluster` using `Vim` or any editor: `sudo vi /etc/hosts`
+```
+...
+127.0.0.1       localhost hadoop-single-cluster
+...
+```
+Now we can access `hadoop-single-cluster:9870` or any other mapped Hadoop daemons ports instead of `localhost`.
+
+To prevent file modification:
+```
+sudo chflags uchg /etc/hosts
+```
+
 
 ## Some Common Default ports
 
