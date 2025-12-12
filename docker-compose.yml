@@ -34,11 +34,11 @@ services:
       # HDFS datanode data
       - hadoop-datanode-data:/opt/hadoop-${HADOOP_VERSION}/hadoop-trungtvo-data/data
       # Hadoop configurations
-      - ./etc/hadoop/core-site.xml:/opt/hadoop-3.4.2/etc/hadoop/core-site.xml
-      - ./etc/hadoop/hdfs-site.xml:/opt/hadoop-3.4.2/etc/hadoop/hdfs-site.xml
-      - ./etc/hadoop/mapred-site.xml:/opt/hadoop-3.4.2/etc/hadoop/mapred-site.xml
-      - ./etc/hadoop/yarn-site.xml:/opt/hadoop-3.4.2/etc/hadoop/yarn-site.xml
-      - ./etc/hadoop/hadoop-env.sh:/opt/hadoop-3.4.2/etc/hadoop/hadoop-env.sh
+      - ./etc/hadoop/core-site.xml:/opt/hadoop-${HADOOP_VERSION}/etc/hadoop/core-site.xml
+      - ./etc/hadoop/hdfs-site.xml:/opt/hadoop-${HADOOP_VERSION}/etc/hadoop/hdfs-site.xml
+      - ./etc/hadoop/mapred-site.xml:/opt/hadoop-${HADOOP_VERSION}/etc/hadoop/mapred-site.xml
+      - ./etc/hadoop/yarn-site.xml:/opt/hadoop-${HADOOP_VERSION}/etc/hadoop/yarn-site.xml
+      - ./etc/hadoop/hadoop-env.sh:/opt/hadoop-${HADOOP_VERSION}/etc/hadoop/hadoop-env.sh
     
     # Environment variables
     environment:
