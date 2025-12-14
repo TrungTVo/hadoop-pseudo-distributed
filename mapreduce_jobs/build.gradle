@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+description = 'Example of Mapreduce Jobs'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.apache.hadoop:hadoop-common:3.4.2"
+    implementation "org.apache.hadoop:hadoop-mapreduce-client-core:3.4.2"
+    testImplementation 'junit:junit:4.13.2'
+}
+
+var basePackage = 'com.example'

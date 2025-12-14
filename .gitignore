@@ -1,0 +1,5 @@
+mapreduce_jobs/.gradle/
+mapreduce_jobs/build/
+
+**/.DS_Store
+.DS_Store

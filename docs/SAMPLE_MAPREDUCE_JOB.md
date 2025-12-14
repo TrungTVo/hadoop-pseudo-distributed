@@ -5,16 +5,17 @@ Make the HDFS directories required to execute MapReduce jobs
 hdfs dfs -mkdir -p /user/root
 ```
 
-Copy the sample input files into the distributed filesystem
+Create `input` folder to store some input files
 ```
 hdfs dfs -mkdir input
 ```
 
+Copy sample input files from local cluster (Hadoop container) into the distributed filesystem (HDFS)
 ```
 hdfs dfs -put /opt/hadoop-3.4.2/etc/hadoop/*.xml input
 ```
 
-Run some of the examples provided
+Run some of the examples provided by Hadoop
 ```
 hadoop jar /opt/hadoop-3.4.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.4.2.jar grep input output 'dfs[a-z.]+'
 ```
