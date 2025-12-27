@@ -1,12 +1,14 @@
 package com.example.wordcount;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -21,6 +23,7 @@ public class WordCount {
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
+        @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             StringTokenizer itr = new StringTokenizer(value.toString());
             while (itr.hasMoreTokens()) {
@@ -34,6 +37,7 @@ public class WordCount {
             extends Reducer<Text, IntWritable, Text, IntWritable> {
         private IntWritable result = new IntWritable();
 
+        @Override
         public void reduce(Text key, Iterable<IntWritable> values,
                 Context context) throws IOException, InterruptedException {
             int sum = 0;
@@ -48,14 +52,25 @@ public class WordCount {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "word count");
+        
         job.setJarByClass(WordCount.class);
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(IntSumReducer.class);
         job.setReducerClass(IntSumReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
+        
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        
+        
+        List<InputSplit> inputSplits = job.getInputFormatClass().getDeclaredConstructor().newInstance().getSplits(job);
+        System.out.println("Number of input splits: " + inputSplits.size());
+        System.out.println("Input Splits Details:");
+        for (InputSplit split : inputSplits) {
+            System.out.println(split.toString());
+        }
+        
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }

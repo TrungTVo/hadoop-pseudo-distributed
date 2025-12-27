@@ -15,9 +15,9 @@ cd /opt/hadoop-3.4.2/mapreduce_jobs
 
 Use `gradlew` command to compile and create `jar` file for our Mapreduce `WordCount` Job
 ```
-gradlew clean
-gradlew compileJava
-gradlew jar
+./gradlew clean
+./gradlew compileJava
+./gradlew jar
 ```
 
 `jar` file will be created under `/opt/hadoop-3.4.2/mapreduce_jobs/build/libs/` folder.
@@ -30,9 +30,9 @@ hdfs dfs -mkdir -p /user/root/wordcount/input
 ```
 
 Copy sample input files from local cluster (Hadoop container) into the distributed filesystem (HDFS).
-Here, we already created 2 sample input files: `file01` and `file02` under `/opt/hadoop-3.4.2/mapreduce_jobs/build/resources/main/` directory.
+Here, we already created 2 sample input files: `wc_input01.txt` and `wc_input02.txt` under `/opt/hadoop-3.4.2/mapreduce_jobs/build/resources/main/` directory.
 ```
-hdfs dfs -put /opt/hadoop-3.4.2/mapreduce_jobs/build/resources/main/* wordcount/input
+hdfs dfs -put /opt/hadoop-3.4.2/mapreduce_jobs/build/resources/main/wc_input* wordcount/input
 ```
 
 Before running our custom Mapreduce `WordCount` Job, we can check the classpath where its `main()` method is run by inspecting its `jar` file
@@ -50,8 +50,8 @@ com/example/wordcount/
 com/example/wordcount/WordCount$IntSumReducer.class
 com/example/wordcount/WordCount$TokenizerMapper.class
 com/example/wordcount/WordCount.class
-file01
-file02
+wc_input01.txt
+wc_input02.txt
 ```
 
 Run our custom Mapreduce `WordCount` Job:
@@ -70,9 +70,13 @@ cat output/*
 
 Result:
 ```
-Bye	1
-Goodbye	1
+Aiko	1
+Bye	2
+Chu	1
+Goodbye	2
 Hadoop	2
-Hello	2
+Hello	4
+Trung	1
+Vo	1
 World	2
 ```
