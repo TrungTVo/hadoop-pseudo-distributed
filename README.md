@@ -27,6 +27,7 @@ docker run -it --name hadoop-single-cluster -h hadoop-single-cluster \
     -v ./etc/hadoop/hdfs-site.xml:/opt/hadoop-3.4.2/etc/hadoop/hdfs-site.xml \
     -v ./etc/hadoop/mapred-site.xml:/opt/hadoop-3.4.2/etc/hadoop/mapred-site.xml \
     -v ./etc/hadoop/yarn-site.xml:/opt/hadoop-3.4.2/etc/hadoop/yarn-site.xml \
+    -v ./mapreduce_jobs:/opt/hadoop-3.4.2/mapreduce_jobs \
     hadoop-pseudo:latest
 ```
 
