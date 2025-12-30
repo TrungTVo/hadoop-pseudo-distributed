@@ -41,6 +41,29 @@ public class AvgTemp {
     }
 
 
+    public static class TempCombiner
+            extends Reducer<Text, TempCountWritable, Text, TempCountWritable> {
+
+        private Logger logger = LoggerFactory.getLogger(TempCombiner.class);
+        private TempCountWritable temp_count = new TempCountWritable();
+
+        @Override
+        public void reduce(Text year, Iterable<TempCountWritable> temperature_counts,
+                Context context) throws IOException, InterruptedException {
+            float temp_sum = 0.0f;
+            int count = 0;
+            for (TempCountWritable temp_count : temperature_counts) {
+                temp_sum += temp_count.getTemperature();
+                count += temp_count.getCount();
+            }
+            this.temp_count.setTemp(temp_sum);
+            this.temp_count.setCount(count);
+            logger.info(String.format("Year: %s -> (%s)", year.toString(), temp_count.toString()));
+            context.write(year, this.temp_count);
+        }
+    }
+
+
     public static class AvgTempReducer
             extends Reducer<Text, TempCountWritable, Text, FloatWritable> {
 
@@ -79,6 +102,7 @@ public class AvgTemp {
         // job.setNumReduceTasks(0);
         // job.setOutputFormatClass(NullOutputFormat.class);
         // job.setCombinerClass(AvgTempReducer.class);                  // CANNOT USE COMBINER FOR AVERAGE CALCULATION
+        job.setCombinerClass(TempCombiner.class);                   // acts as mini-reducer to reduce data transfer
         job.setReducerClass(AvgTempReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(TempCountWritable.class);
