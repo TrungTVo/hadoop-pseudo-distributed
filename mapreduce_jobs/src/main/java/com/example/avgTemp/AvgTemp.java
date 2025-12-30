@@ -21,44 +21,44 @@ public class AvgTemp {
     private static Logger logger = LoggerFactory.getLogger(AvgTemp.class);
 
     public static class YearMapper
-            extends Mapper<Object, Text, Text, Text> {
+            extends Mapper<Object, Text, Text, TempCountWritable> {
 
         private Logger logger = LoggerFactory.getLogger(YearMapper.class);
         private Text year = new Text();
-        private Text temperature_count = new Text();
+        private TempCountWritable temperature_count = new TempCountWritable();
 
         @Override
         public void map(Object inkey, Text invalue, Context context) throws IOException, InterruptedException {
             logger.info("Map Value: " + invalue.toString());
             String[] temp_record = invalue.toString().split(",");
             String year = temp_record[0];
-            String temperature = temp_record[2] + ",1";
+            float temperature = Float.parseFloat(temp_record[2]);
             this.year.set(year);
-            this.temperature_count.set(temperature);
+            this.temperature_count.setTemp(temperature);
+            this.temperature_count.setCount(1);
             context.write(this.year, this.temperature_count);
         }
     }
 
-    
+
     public static class AvgTempReducer
-            extends Reducer<Text, Text, Text, FloatWritable> {
+            extends Reducer<Text, TempCountWritable, Text, FloatWritable> {
 
         private Logger logger = LoggerFactory.getLogger(AvgTempReducer.class);
         private FloatWritable temp_avg = new FloatWritable();
 
         @Override
-        public void reduce(Text year, Iterable<Text> temperature_counts,
+        public void reduce(Text year, Iterable<TempCountWritable> temperature_counts,
                 Context context) throws IOException, InterruptedException {
             float temp_sum = 0.0f;
             int count = 0;
-            for (Text temp_count : temperature_counts) {
-                String[] temp_record = temp_count.toString().split(",");
-                temp_sum += Float.parseFloat(temp_record[0]);
-                count += Integer.parseInt(temp_record[1]);
+            for (TempCountWritable temp_count : temperature_counts) {
+                temp_sum += temp_count.getTemperature();
+                count += temp_count.getCount();
             }
             float temp_avg = (float) temp_sum / count;
             this.temp_avg.set(temp_avg);
-            logger.info(String.format("%s -> Average Temperature: %.2f", year.toString(), temp_avg));
+            logger.info(String.format("Year: %s -> Average Temperature: %.2f", year.toString(), temp_avg));
             context.write(year, this.temp_avg);
         }
     }
@@ -81,7 +81,7 @@ public class AvgTemp {
         // job.setCombinerClass(AvgTempReducer.class);                  // CANNOT USE COMBINER FOR AVERAGE CALCULATION
         job.setReducerClass(AvgTempReducer.class);
         job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(Text.class);
+        job.setMapOutputValueClass(TempCountWritable.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FloatWritable.class);
 
