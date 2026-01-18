@@ -28,10 +28,50 @@
     <value>/opt/hadoop-3.4.2/hadoop-trungtvo-data/name</value>
   </property>
 
+  <property>
+    <name>dfs.namenode.rpc-address</name>
+    <value>hadoop-single-cluster:8020</value>
+  </property>
+
   <!-- DataNode -->
   <property>
     <name>dfs.datanode.data.dir</name>
     <value>/opt/hadoop-3.4.2/hadoop-trungtvo-data/data</value>
+  </property>
+
+  <property>
+    <name>dfs.datanode.use.datanode.hostname</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>dfs.client.use.datanode.hostname</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>dfs.datanode.address</name>
+    <value>0.0.0.0:9866</value>
+  </property>
+
+  <property>
+    <name>dfs.datanode.hostname</name>
+    <value>hadoop-single-cluster</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.rpc-bind-host</name>
+    <value>0.0.0.0</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.servicerpc-bind-host</name>
+    <value>0.0.0.0</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.http-bind-host</name>
+    <value>0.0.0.0</value>
   </property>
 
   <!-- Secondary NameNode -->

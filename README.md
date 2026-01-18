@@ -19,6 +19,7 @@ docker run -it --name hadoop-single-cluster -h hadoop-single-cluster \
     -p 9870:9870 \
     -p 9868:9868 \
     -p 9864:9864 \
+    -p 9866:9866 \
     -p 8088:8088 \
     -p 8042:8042 \
     -p 19888:19888 \
